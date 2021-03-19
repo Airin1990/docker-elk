@@ -41,7 +41,7 @@ services:
         target: /usr/share/logstash/pipeline
         read_only: true
     ports:
-      - "5044:5044"
+      - "5045:5045"
       - "5000:5000/tcp"
       - "5000:5000/udp"
       - "9600:9600"
@@ -68,6 +68,19 @@ services:
       - elk
     depends_on:
       - elasticsearch
+
+  filebeat:
+    build:
+      context: filebeat/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - ./filebeat/log:/usr/share/filebeat/log
+      - ./filebeat/data:/usr/share/filebeat/data
+    networks:
+      - elk
+    depends_on:
+      - logstash
 
 networks:
   elk:

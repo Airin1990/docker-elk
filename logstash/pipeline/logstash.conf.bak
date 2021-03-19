@@ -1,6 +1,12 @@
 input {
 	beats {
-		port => 5045
+		port => 5044
+	}
+
+	tcp {
+		mode => "server"
+		port => 5000
+		codec => json_lines
 	}
 }
 
@@ -13,7 +19,7 @@ output {
 	elasticsearch {
 		## Output Configs: See https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html
 		hosts => "elasticsearch:9200"
-		index => "%{[@metadata][beat]}-%{[@metadata][version]}"
+		index => "%{app_name}-%{+YYYY.MM.dd}"
 		user => "elastic"
 		password => "changeme"
 		ecs_compatibility => disabled
